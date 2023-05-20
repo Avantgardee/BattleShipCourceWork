@@ -1,0 +1,40 @@
+program BattleShipGame;
+
+uses
+  Vcl.Forms,
+  BattleShipUnit in 'BattleShipUnit.pas' {BattleForm},
+  UnitSound in 'UnitSound.pas',
+  MainMenuUnit in 'MainMenuUnit.pas' {Form1},
+  Vcl.Themes,
+  Vcl.Styles,
+  TableOfBattlesUnit in 'TableOfBattlesUnit.pas' {Form3},
+  AddPlayerUnit in 'AddPlayerUnit.pas' {AddShipsForm},
+  ListUnit in 'ListUnit.pas',
+  Unit2 in 'Unit2.pas' {StartForm};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+
+  StartForm := TStartForm.Create(Application);
+  StartForm.Show;
+  StartForm.Update;
+  Application.MainFormOnTaskbar := True;
+
+
+  Application.CreateForm(TForm1, Form1);
+  Form1.Visible:=false;
+  While StartForm.TimerLoadScreen.Enabled do
+  begin
+      Application.ProcessMessages;
+  end;
+  StartForm.Hide;
+  StartForm.Free;
+  TStyleManager.TrySetStyle('Tablet Light');
+   Application.CreateForm(TBattleForm, BattleForm);
+  Application.CreateForm(TForm3, Form3);
+  Application.CreateForm(TAddShipsForm, AddShipsForm);
+  Application.CreateForm(TStartForm, StartForm);
+  Application.Run;
+end.

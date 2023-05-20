@@ -1,0 +1,186 @@
+object BattleForm: TBattleForm
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = #1052#1086#1088#1089#1082#1086#1081' '#1073#1086#1081
+  ClientHeight = 740
+  ClientWidth = 860
+  Color = clBtnFace
+  DoubleBuffered = True
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clBlack
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  Menu = MainMenu1
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Scaled = False
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnMouseDown = FormMouseDown
+  OnShow = FormShow
+  PixelsPerInch = 120
+  TextHeight = 14
+  object StaticText1: TStaticText
+    Left = 32
+    Top = 363
+    Width = 4
+    Height = 4
+    Color = clGradientActiveCaption
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -17
+    Font.Name = 'Calibri'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 0
+    Transparent = False
+  end
+  object StaticText2: TStaticText
+    Left = 529
+    Top = 363
+    Width = 4
+    Height = 4
+    Color = clGradientActiveCaption
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -17
+    Font.Name = 'Calibri'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 1
+    Transparent = False
+  end
+  object StaticText3: TStaticText
+    Left = 216
+    Top = 363
+    Width = 161
+    Height = 78
+    AutoSize = False
+    Caption = 'C'#1086#1089#1090#1086#1103#1085#1080#1077' '#1092#1083#1086#1090#1072':'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -18
+    Font.Name = 'Calibri'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 2
+  end
+  object StaticText4: TStaticText
+    Left = 704
+    Top = 363
+    Width = 148
+    Height = 94
+    AutoSize = False
+    Caption = 'C'#1086#1089#1090#1086#1103#1085#1080#1077' '#1092#1083#1086#1090#1072':'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -18
+    Font.Name = 'Calibri'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 535
+    Width = 860
+    Height = 41
+    Margins.Bottom = 15
+    Align = alBottom
+    BevelOuter = bvNone
+    Color = clWhite
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWhite
+    Font.Height = -20
+    Font.Name = 'Calibri'
+    Font.Style = []
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 4
+    StyleElements = []
+  end
+  object RichEdit1: TRichEdit
+    Left = 0
+    Top = 576
+    Width = 860
+    Height = 164
+    Align = alBottom
+    Color = clWhite
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clBlack
+    Font.Height = -17
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Lines.Strings = (
+      '')
+    ParentFont = False
+    ParentShowHint = False
+    ReadOnly = True
+    ScrollBars = ssBoth
+    ShowHint = False
+    TabOrder = 5
+    WordWrap = False
+    StyleElements = []
+    Zoom = 100
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 50
+    OnTimer = Timer1Timer
+    Left = 32
+    Top = 24
+  end
+  object MainMenu1: TMainMenu
+    Left = 136
+    Top = 32
+    object N1: TMenuItem
+      Caption = #1054#1087#1094#1080#1080
+      GroupIndex = 1
+      RadioItem = True
+      OnClick = N1Click
+      object N2: TMenuItem
+        AutoCheck = True
+        Caption = #1047#1074#1091#1082#1086#1074#1086#1077' '#1089#1086#1087#1088#1086#1074#1086#1078#1076#1077#1085#1080#1077
+        Checked = True
+        GroupIndex = 1
+        OnClick = N2Click
+      end
+      object N3: TMenuItem
+        Caption = #1064#1090#1088#1080#1093#1086#1074#1082#1072' '#1091#1073#1080#1090#1099#1093' '#1082#1086#1088#1072#1073#1083#1077#1081
+        Checked = True
+        GroupIndex = 1
+        OnClick = N3Click
+      end
+    end
+    object N4: TMenuItem
+      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+      GroupIndex = 1
+      OnClick = N4Click
+      object N5: TMenuItem
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1073#1086#1081
+        OnClick = N5Click
+      end
+      object N6: TMenuItem
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1078#1091#1088#1085#1072#1083' '#1093#1086#1076#1086#1074
+        OnClick = N6Click
+      end
+    end
+  end
+  object SaveFile: TSaveDialog
+    Filter = #1060#1072#1081#1083'|*.txt'
+    Left = 264
+    Top = 56
+  end
+  object SaveGame: TSaveDialog
+    Filter = #1060#1072#1081#1083'|*.dat'
+    Left = 448
+    Top = 160
+  end
+end

@@ -1,0 +1,569 @@
+﻿Unit AddPlayerUnit;
+
+Interface
+
+Uses
+    Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+    System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+    Vcl.ExtCtrls, UnitSound, Vcl.StdCtrls, BattleShip, MainMenuUnit, Vcl.Menus;
+
+Type
+
+    TAddShipsForm = Class(TForm)
+        FourDeckImg: TImage;
+        ThreeDeckImg: TImage;
+        TwoDeckImg: TImage;
+        OneDeckImg: TImage;
+        BtnSetFour: TPanel;
+        BtnSetThree: TPanel;
+        BtnSetTwo: TPanel;
+        BtnSetOne: TPanel;
+        ImgReadyGame: TImage;
+        PaintBox1: TPaintBox;
+        Timer1: TTimer;
+        BtnReadyGame: TPanel;
+        ImgRandom: TImage;
+        BtnRandom: TPanel;
+        BtnClearMap: TPanel;
+        ImgClearMap: TImage;
+        OneDeckInfo: TLabel;
+        TwoDeckInfo: TLabel;
+        ThreeDeckInfo: TLabel;
+        FourDeckInfo: TLabel;
+        Username: TEdit;
+        Label1: TLabel;
+        Label2: TLabel;
+        MainMenu1: TMainMenu;
+        N1: TMenuItem;
+        Procedure FormCreate(Sender: TObject);
+
+        Procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
+          WheelDelta: Integer; MousePos: TPoint; Var Handled: Boolean);
+        Procedure Timer1Timer(Sender: TObject);
+        Procedure PaintBox1MouseDown(Sender: TObject; Button: TMouseButton;
+          Shift: TShiftState; X, Y: Integer);
+
+        Procedure BtnRandomClick(Sender: TObject);
+        Procedure BtnClearMapClick(Sender: TObject);
+        Procedure BtnReadyGameClick(Sender: TObject);
+        Procedure FormCloseQuery(Sender: TObject; Var CanClose: Boolean);
+
+        Procedure ImgReadyGameMouseEnter(Sender: TObject);
+        Procedure ImgReadyGameMouseLeave(Sender: TObject);
+        Procedure FormKeyDown(Sender: TObject; Var Key: Word;
+          Shift: TShiftState);
+        Procedure N1Click(Sender: TObject);
+
+
+    Private
+        { Private declarations }
+    Public
+        Procedure ClearUsersShips(Var Map1ForCLear, Map2ForCLear: TMap;
+          Var Ships1ForClear, Ships2ForClear: TCoordinatesArr);
+        Procedure UpdateStas(ArrOfShips: TCoordinatesArr);
+    End;
+
+Var
+    PlayerMain, PlayerPC: TPlayer;
+    AddShipsForm: TAddShipsForm;
+    Path: String;
+    Buf: TBitmap; // граф. буфер
+    Img: Array [0 .. 4] Of TBitmap; // изображения клеток
+    ImgForLetter: Array [0 .. 9] Of TBitmap;
+    ImgForNum: Array [0 .. 9] Of TBitmap;
+    Current: Integer; // текущий игрок
+    ShipOrientation: Integer;
+    // горизонтальный или вертикальный корабль при расстановке
+    PlayerMap, OpponentMap: TMap;
+    ShotS: TSound;
+    WaterShotS: TSound;
+    SetShipS: TSound;
+    PlayersShips, OpponentShips: TCoordinatesArr;
+    Mode, CountOfShips: Integer;
+
+Implementation
+
+{$R *.dfm}
+
+Procedure InitializationResourses();
+Var
+    I, J: Integer;
+Begin
+    Path := ExtractFileDir(Application.ExeName);
+    Buf := TBitmap.Create;
+    Buf.Width := 352;
+    Buf.Height := 352;
+    Try
+        AddShipsForm.ThreeDeckImg.Picture.LoadFromFile
+          (Path + '\imagesForGame\shipsicons\3.bmp');
+        AddShipsForm.TwoDeckImg.Picture.LoadFromFile
+          (Path + '\imagesForGame\shipsicons\2.bmp');
+        AddShipsForm.OneDeckImg.Picture.LoadFromFile
+          (Path + '\imagesForGame\shipsicons\1.bmp');
+        AddShipsForm.FourDeckImg.Picture.LoadFromFile
+          (Path + '\imagesForGame\shipsicons\4.bmp');
+        AddShipsForm.ImgReadyGame.Picture.Graphic := TBitmap.Create;
+        AddShipsForm.ImgReadyGame.Picture.Bitmap.LoadFromFile
+          (Path + '\imagesForGame\shipsicons\startgame.bmp');
+        AddShipsForm.ImgRandom.Picture.LoadFromFile
+          (Path + '\imagesForGame\shipsicons\btnRandom.bmp');
+        AddShipsForm.ImgClearMap.Picture.LoadFromFile
+          (Path + '\imagesForGame\shipsicons\btnClearMaps.bmp');
+
+        For I := 0 To 4 Do
+        Begin
+            Img[I] := TBitmap.Create;
+            If I = 1 Then
+            Begin
+                Img[I].TransparentColor := ClBlue;
+                Img[I].Transparent := True;
+            End;
+            Img[I].LoadFromFile(Path + '\imagesForGame\' + IntToStr(I)
+              + '.bmp');
+        End;
+
+        For I := 0 To 9 Do
+        Begin
+            ImgForLetter[I] := TBitmap.Create;
+            ImgForLetter[I].LoadFromFile(Path + '\imagesForGame\retroalphabet\'
+              + IntToStr(I + 1) + '.bmp');
+            ImgForNum[I] := TBitmap.Create;
+            ImgForNum[I].LoadFromFile(Path + '\imagesForGame\retroalphabet\' +
+              IntToStr(I + 11) + '.bmp');
+        End;
+        For I := 0 To 9 Do
+            For J := 0 To 9 Do
+            Begin
+                PlayerMap[I, J] := 0;
+                OpponentMap[I, J] := 0;
+            End;
+        ShotS := TSound.Create(Path + '\shot.wav');
+        WaterShotS := TSound.Create(Path + '\watershot.wav');
+        SetShipS := TSound.Create(Path + '\setship.wav');
+    Except
+        MessageBox(AddShipsForm.Handle,
+          'Ошибка загрузки файлов для игры, проверьте корректность установки',
+          'Предупреждение!', MB_OK + MB_ICONWARNING);
+        Application.Terminate;
+    End;
+    AddShipsForm.Timer1.Enabled := True;
+    Mode := 0; // режим расстановки
+    CountOfShips := 1;
+    ShipOrientation := 1; // вертикальное положение
+    Current := 0;
+End;
+
+Function CreateShip(X, Y, Orientation, Count: Integer; Var Map: TMap;
+  Var CoorArr: TCoordinatesArr): Boolean;
+Var
+    I, J, K, NumberOfDecks, OrientationX, OrientationY: Integer;
+    IsOccupiedShip, IsSetShip: Boolean;
+Begin
+    NumberOfDecks := 0;
+    IsSetShip := False;
+    Case Count Of
+        1:
+            NumberOfDecks := 3;
+        2 .. 3:
+            NumberOfDecks := 2;
+        4 .. 6:
+            NumberOfDecks := 1;
+    End;
+    If Count < 7 Then
+    Begin
+        If Orientation = 1 Then
+        Begin
+            OrientationY := 1;
+            OrientationX := 0;
+        End
+        Else
+        Begin
+            OrientationY := 0;
+            OrientationX := 1;
+        End;
+        If ((Y + NumberOfDecks <= 9) And (OrientationY = 1)) Or
+          ((X + NumberOfDecks <= 9) And (OrientationX = 1)) Then
+        Begin
+            IsOccupiedShip := False;
+            For K := 0 To NumberOfDecks Do
+                For I := X - 1 To X + 1 Do
+                    For J := Y - 1 To Y + 1 Do
+                        If (I + K * OrientationX >= 0) And
+                          (J + K * OrientationY >= 0) And
+                          (I + K * OrientationX <= 9) And
+                          (J + K * OrientationY <= 9) And
+                          (Map[I + K * OrientationX, J + K * OrientationY]
+                          > 0) Then
+                            IsOccupiedShip := True; // занято
+            If Not(IsOccupiedShip) Then
+            Begin
+                For I := 0 To NumberOfDecks Do
+                Begin
+                    If I = 0 Then
+                    Begin
+                        CoorArr[Count].StartOfShip[1] := X;
+                        CoorArr[Count].StartOfShip[2] := Y;
+                    End;
+                    Map[X + I * OrientationX, Y + I * OrientationY] := 3;
+                    If I = NumberOfDecks Then
+                    Begin
+                        CoorArr[Count].EndOfShip[1] := X + I * OrientationX;
+                        CoorArr[Count].EndOfShip[2] := Y + I * OrientationY;
+                        CoorArr[Count].LifeDecks := NumberOfDecks + 1;
+                    End;
+
+                End;
+                IsSetShip := True;
+            End
+            Else
+                IsSetShip := False;
+        End
+        Else
+            IsSetShip := False;
+
+    End
+    Else
+    Begin
+        IsOccupiedShip := False; // не занято из клеток
+        For I := X - 1 To X + 1 Do
+            For J := Y - 1 To Y + 1 Do
+                If (I >= 0) And (J >= 0) And (I <= 9) And (J <= 9) And
+                  (Map[I, J] > 0) Then
+                    IsOccupiedShip := True; // занято
+        If Not(IsOccupiedShip) Then
+        Begin
+            Map[X, Y] := 3;
+            CoorArr[Count].StartOfShip[1] := X;
+            CoorArr[Count].StartOfShip[2] := Y;
+            CoorArr[Count].EndOfShip[1] := X;
+            CoorArr[Count].EndOfShip[2] := Y;
+            CoorArr[Count].LifeDecks := 1;
+            IsSetShip := True;
+        End
+        Else
+            IsSetShip := False;
+    End;
+    CreateShip := IsSetShip;
+End;
+
+Procedure ReverseOrientation();
+Begin
+    If ShipOrientation = 1 Then
+        ShipOrientation := 2
+    Else
+        ShipOrientation := 1;
+End;
+
+Procedure FillMapWithShips(X, Y, Naklon: Integer; Var Map: TMap;
+  Var CoorArrOfPlayer: TCoordinatesArr);
+Var
+    IsSetShip: Boolean;
+Begin
+    X := X Div 32 - 1;
+    Y := Y Div 32 - 1;
+    IsSetShip := False;
+    If (X >= 0) And (Y >= 0) And (X <= 9) And (Y <= 9) And (Mode = 0) And
+      (CountOfShips <= 10) Then
+    Begin
+        Case CountOfShips Of
+            1 .. 10:
+                IsSetShip := CreateShip(X, Y, Naklon, CountOfShips, Map,
+                  CoorArrOfPlayer);
+        End;
+        If IsSetShip Then
+        Begin
+            Inc(CountOfShips);
+            If (Current = 0) And (Form1.FIsSound) Then
+                If SetshipS.Available Then
+                    SetshipS.PlayTrack;
+        End;
+
+    End;
+End;
+
+Procedure DrawLettersAndNum(I: Integer);
+Begin
+    Buf.Canvas.Draw(I * 32 + 32, 0, ImgForLetter[I]);
+    Buf.Canvas.Draw(0, I * 32 + 32, ImgForNum[I]);
+
+End;
+
+Procedure DrawMaterials();
+Var
+    I, J: Integer;
+Begin
+    Buf.Canvas.Brush.Color := ClWhite;
+    Buf.Canvas.Pen.Style := PsClear;
+    Buf.Canvas.Rectangle(0, 0, 352, 352);
+    For I := 0 To 9 Do
+    Begin
+        DrawLettersAndNum(I);
+        For J := 0 To 9 Do
+        Begin
+            Buf.Canvas.Draw(I * 32 + 32, J * 32 + 32, Img[PlayerMap[I, J]]);
+        End;
+    End;
+End;
+
+Procedure TAddShipsForm.ClearUsersShips(Var Map1ForCLear, Map2ForCLear: TMap;
+  Var Ships1ForClear, Ships2ForClear: TCoordinatesArr);
+Var
+    M, N: Integer;
+Begin
+    CountOfShips := 1;
+    Mode := 0;
+    M := 0;
+    N := 0;
+    For M := 0 To 9 Do
+    Begin
+        Ships1ForClear[M + 1].StartOfShip[1] := 0;
+        Ships1ForClear[M + 1].StartOfShip[2] := 0;
+        Ships1ForClear[M + 1].EndOfShip[1] := 0;
+        Ships1ForClear[M + 1].EndOfShip[2] := 0;
+        Ships1ForClear[M + 1].LifeDecks := 0;
+        Ships2ForClear[M + 1].StartOfShip[1] := 0;
+        Ships2ForClear[M + 1].StartOfShip[2] := 0;
+        Ships2ForClear[M + 1].EndOfShip[1] := 0;
+        Ships2ForClear[M + 1].EndOfShip[2] := 0;
+        Ships2ForClear[M + 1].LifeDecks := 0;
+        For N := 0 To 9 Do
+        Begin
+            Map1ForCLear[M, N] := 0;
+            Map2ForCLear[M, N] := 0;
+        End;
+    End;
+End;
+
+Procedure RemainingShips(StartShip, EndShip, CountOfDecks: Integer;
+  LocOfShips: TCoordinatesArr);
+Var
+    I, J, Total: Integer;
+    ImgOfDeck: TBitmap;
+    Info: TLabel;
+Begin
+    Case CountOfDecks Of
+        4:
+            Info := AddShipsForm.FourDeckInfo;
+        3:
+            Info := AddShipsForm.ThreeDeckInfo;
+        2:
+            Info := AddShipsForm.TwoDeckInfo;
+        1:
+            Info := AddShipsForm.OneDeckInfo;
+    End;
+    Total := 0;
+    For I := StartShip To EndShip Do
+    Begin
+        If (LocOfShips[I].LifeDecks = 0) Then
+            Inc(Total);
+    End;
+    Info.Caption := IntToStr(Total);
+End;
+
+Procedure TAddShipsForm.UpdateStas(ArrOfShips: TCoordinatesArr);
+Begin
+    RemainingShips(1, 1, 4, ArrOfShips);
+    RemainingShips(2, 3, 3, ArrOfShips);
+    RemainingShips(4, 6, 2, ArrOfShips);
+    RemainingShips(7, 10, 1, ArrOfShips);
+End;
+
+Procedure TAddShipsForm.BtnClearMapClick(Sender: TObject);
+Begin
+    ClearUsersShips(PlayerMap, OpponentMap, PlayersShips, OpponentShips);
+    UpdateStas(PlayersShips);
+    SetCursorPos(AddShipsForm.Left + 200, AddShipsForm.Top + 350);
+    BtnReadyGame.Enabled := False;
+    ImgReadyGame.Visible := False;
+    BtnReadyGame.Visible := False;
+End;
+
+Procedure TAddShipsForm.FormKeyDown(Sender: TObject; Var Key: Word;
+  Shift: TShiftState);
+Begin
+    If (Key = VK_LEFT) Or (Key = VK_RIGHT) Then
+        ReverseOrientation();
+     If Key = VK_ESCAPE Then
+        Close;
+      If (Key = VK_RETURN) and (mode = 1) and  Not((Username.Text = '') Or
+      (''.IsNullOrWhiteSpace(Username.Text)))Then
+        AddShipsForm.BtnReadyGameClick(Sender);
+      If Key = VK_F1 then
+        N1.Click;
+
+End;
+
+Procedure RandomShipSet(Var Map: TMap; Var Coor: TCoordinatesArr);
+Var
+    I, J, N: Integer;
+Begin
+    Randomize;
+    CountOfShips := 1;
+    While (CountOfShips <= 10) Do
+    Begin
+        I := Random(352);
+        J := Random(352);
+        N := Random(2) + 1;
+        FillMapWithShips(I, J, N, Map, Coor);
+    End;
+End;
+
+Procedure TAddShipsForm.BtnRandomClick(Sender: TObject);
+Var
+    I, J, N: Integer;
+Begin
+    ClearUsersShips(PlayerMap, OpponentMap, PlayersShips, OpponentShips);
+    RandomShipSet(PlayerMap, PlayersShips);
+    UpdateStas(PlayersShips);
+End;
+
+Procedure TAddShipsForm.BtnReadyGameClick(Sender: TObject);
+Begin
+
+    BattleForm.PlayerMap := PlayerMap;
+    BattleForm.OpponentMap := OpponentMap;
+    BattleForm.PlayersShips := PlayersShips;
+    BattleForm.OpponentShips := OpponentShips;
+    BattleForm.Name1 := Username.Text;
+    BattleForm.Mode := 0;
+    Username.Text := '';
+    BattleForm.Timer1.Enabled := True;
+    UpdateStas(PlayersShips);
+    AddShipsForm.Hide;
+    BattleForm.Show;
+
+End;
+
+
+
+Procedure TAddShipsForm.FormCloseQuery(Sender: TObject; Var CanClose: Boolean);
+Begin
+    CanClose := Application.MessageBox('Вы уверены, что хотите закрыть это окно', 'Закрыть?', MB_YESNO + MB_ICONINFORMATION) = idYES;
+    If CanClose Then
+    Begin
+        ClearUsersShips(PlayerMap, OpponentMap, PlayersShips, OpponentShips);
+        UpdateStas(PlayersShips);
+        Form1.Show;
+        Username.Text := '';
+    End;
+End;
+
+Procedure TAddShipsForm.FormCreate(Sender: TObject);
+Begin
+    InitializationResourses();
+    SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) OR
+      WS_EX_APPWINDOW);
+
+End;
+
+Procedure TAddShipsForm.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; Var Handled: Boolean);
+Begin
+    ReverseOrientation()
+End;
+
+Procedure TAddShipsForm.ImgReadyGameMouseEnter(Sender: TObject);
+Begin
+    // Path := ExtractFileDir(Application.ExeName);
+    AddShipsForm.ImgReadyGame.Picture.LoadFromFile
+      (Path + '\imagesForGame\shipsicons\btnOnClick.bmp');
+
+End;
+
+Procedure TAddShipsForm.ImgReadyGameMouseLeave(Sender: TObject);
+Begin
+    // Path := ExtractFileDir(Application.ExeName);
+    AddShipsForm.ImgReadyGame.Picture.LoadFromFile
+      (Path + '\imagesForGame\shipsicons\startgame.bmp');
+End;
+
+Procedure TAddShipsForm.N1Click(Sender: TObject);
+Begin
+    Application.MessageBox
+      ('Игровое поле — квадрат 10×10 каждого игрока, на котором размещается флот кораблей.'
+      + #10#13 + #10#13 + 'Размещаются:' + #10#13 +
+      '- 1 корабль — ряд из 4 клеток («четырёхпалубные»)' + #10#13 +
+      '- 2 корабля — ряд из 3 клеток («трёхпалубные»)' + #10#13 +
+      '- 3 корабля — ряд из 2 клеток («двухпалубные»)' + #10#13 +
+      '- 4 корабля — 1 клетка («однопалубные»)' + #10#13 + #10#13 +
+      'При размещении корабли не могут касаться друг друга сторонами и углами.',
+      'ИНФОРМАЦИЯ');
+End;
+
+Procedure TAddShipsForm.PaintBox1MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+Var
+    I, J: Integer;
+    NewShot, Status, IsShipKilled: Boolean;
+Begin
+    Status := False;
+    If Mode = 0 Then
+    Begin
+        FillMapWithShips(X, Y, ShipOrientation, PlayerMap, PlayersShips);
+        UpdateStas(PlayersShips);
+    End;
+
+End;
+
+Procedure TAddShipsForm.Timer1Timer(Sender: TObject);
+Var
+    I, J, N, NumberOfDecks, OrientationX, OrientationY: Integer;
+Begin
+
+    If (Mode = 0) And (CountOfShips = 11) Then
+    Begin
+        RandomShipSet(OpponentMap, OpponentShips);
+        Mode := 1;
+        Current := 0;
+
+    End;
+    If (Mode = 1) And Not((Username.Text = '') Or
+      (''.IsNullOrWhiteSpace(Username.Text))) Then
+    Begin
+        BtnReadyGame.Enabled := True;
+        ImgReadyGame.Visible := True;
+        BtnReadyGame.Visible := True;
+    End
+    Else
+    Begin
+        BtnReadyGame.Enabled := False;
+        ImgReadyGame.Visible := False;
+        BtnReadyGame.Visible := False;
+    End;
+
+    DrawMaterials();
+
+    If (Mode = 0) And (CountOfShips <= 10) Then
+    Begin
+        Case CountOfShips Of
+            1:
+                NumberOfDecks := 4;
+            2, 3:
+                NumberOfDecks := 3;
+            4, 5, 6:
+                NumberOfDecks := 2;
+            7, 8, 9, 10:
+                NumberOfDecks := 1;
+        End;
+        If ShipOrientation = 1 Then
+        Begin
+            OrientationY := 1;
+            OrientationX := 0;
+        End
+        Else
+        Begin
+            OrientationY := 0;
+            OrientationX := 1;
+        End;
+        For I := 1 To NumberOfDecks Do
+        Begin
+            Buf.Canvas.Draw(Mouse.CursorPos.X - AddShipsForm.Left - 16 - 30 +
+              (32 * (I - 1) * OrientationX), Mouse.CursorPos.Y -
+              AddShipsForm.Top - 170 - 64 +
+              (32 * (I - 1) * OrientationY), Img[3]);
+        End;
+    End;
+    AddShipsForm.PaintBox1.Canvas.Draw(0, 0, Buf);
+End;
+
+End.

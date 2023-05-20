@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.081,C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit2.pas=C:\Users\webdesigner\Desktop\coursework\BattleShip\AddPlayerUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.230,=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.872,=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.247,=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.492,C:\Users\webdesigner\Desktop\coursework\BattleShip\MainMenu.pas=C:\Users\webdesigner\Desktop\coursework\BattleShip\MainMenuUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.996,C:\Users\webdesigner\Documents\Embarcadero\Studio\Projects\Unit2.dfm=C:\Users\webdesigner\Desktop\coursework\BattleShip\BattleShip.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.799,=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.028,=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.996,C:\Users\webdesigner\Documents\Embarcadero\Studio\Projects\Unit2.pas=C:\Users\webdesigner\Desktop\coursework\BattleShip\BattleShip.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.315,C:\Users\webdesigner\Desktop\coursework\BattleShip\TableOfBattles.pas=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.468,D:\coursework\BattleShip\BattleShipUnit.dfm=D:\coursework\BattleShip\BattleShip.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.584,C:\Users\webdesigner\Desktop\coursework\BattleShip\ListUnit.pas=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.315,C:\Users\webdesigner\Desktop\coursework\BattleShip\TableOfBattles.dfm=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit3.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.305,=C:\Users\webdesigner\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.432,C:\Users\webdesigner\Desktop\coursework\BattleShip\MainMenu.dfm=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.492,C:\Users\webdesigner\Desktop\coursework\BattleShip\MainMenu.dfm=C:\Users\webdesigner\Desktop\coursework\BattleShip\MainMenuUnit.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.468,D:\coursework\BattleShip\BattleShipUnit.pas=D:\coursework\BattleShip\BattleShip.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.170,D:\coursework\BattleShip\Unit2.dfm=D:\coursework\BattleShip\LoadUnit.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.020,=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.858,=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.100,=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.673,C:\Users\webdesigner\Desktop\coursework\BattleShip\UnitSound.pas=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.372,C:\Users\webdesigner\Documents\Embarcadero\Studio\Projects\Project17.dproj=C:\Users\webdesigner\Desktop\coursework\BattleShip\BattleShipGame.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.081,C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit2.dfm=C:\Users\webdesigner\Desktop\coursework\BattleShip\AddPlayerUnit.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.170,D:\coursework\BattleShip\Unit2.pas=D:\coursework\BattleShip\LoadUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.684,D:\coursework\BattleShip\TableOfBattlesUnit.pas=D:\coursework\BattleShip\TableOfBattles.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.186,C:\Users\webdesigner\Desktop\Курсач 3.0 (96) рот ебал короля\Курсач 3.0\UnitLoadScreen.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.684,D:\coursework\BattleShip\TableOfBattlesUnit.dfm=D:\coursework\BattleShip\TableOfBattles.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.552,C:\Users\webdesigner\Desktop\coursework\BattleShip\UnitLoadScreen.dfm=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit2.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.432,C:\Users\webdesigner\Desktop\coursework\BattleShip\MainMenu.pas=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.591,C:\Users\webdesigner\Desktop\coursework\BattleShip\BattleShipGame.dproj=C:\Users\webdesigner\Desktop\coursework\BattleShip\BattleShipGame.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.552,C:\Users\webdesigner\Desktop\coursework\BattleShip\UnitLoadScreen.pas=C:\Users\webdesigner\Desktop\coursework\BattleShip\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.381,C:\Users\webdesigner\Desktop\coursework\BattleShip\UnitLoadScreen.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.653,=C:\Users\webdesigner\Desktop\Курсач 3.0 (96) рот ебал короля\Курсач 3.0\UnitLoadScreen.pas</Transaction>
+  </Transactions>
+</BorlandProject>

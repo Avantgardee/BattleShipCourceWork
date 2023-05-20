@@ -1,0 +1,281 @@
+object AddShipsForm: TAddShipsForm
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = #1056#1072#1089#1089#1090#1072#1085#1086#1074#1082#1072' '#1082#1086#1088#1072#1073#1083#1077#1081
+  ClientHeight = 703
+  ClientWidth = 547
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  Menu = MainMenu1
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Scaled = False
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnMouseWheel = FormMouseWheel
+  PixelsPerInch = 120
+  TextHeight = 16
+  object TwoDeckImg: TImage
+    Left = 414
+    Top = 281
+    Width = 64
+    Height = 64
+  end
+  object OneDeckImg: TImage
+    Left = 414
+    Top = 193
+    Width = 64
+    Height = 64
+  end
+  object ThreeDeckImg: TImage
+    Left = 414
+    Top = 369
+    Width = 64
+    Height = 64
+  end
+  object FourDeckImg: TImage
+    Left = 414
+    Top = 457
+    Width = 64
+    Height = 64
+  end
+  object PaintBox1: TPaintBox
+    Left = 30
+    Top = 169
+    Width = 352
+    Height = 352
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'MapBox'
+    Font.Style = []
+    ParentFont = False
+    OnMouseDown = PaintBox1MouseDown
+  end
+  object OneDeckInfo: TLabel
+    Left = 484
+    Top = 213
+    Width = 42
+    Height = 32
+    Alignment = taCenter
+    AutoSize = False
+    Caption = '4'
+    Color = clBtnFace
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Press Start 2P'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+    StyleElements = [seClient, seBorder]
+  end
+  object TwoDeckInfo: TLabel
+    Left = 484
+    Top = 299
+    Width = 42
+    Height = 30
+    Alignment = taCenter
+    AutoSize = False
+    Caption = '3'
+    Color = clBtnFace
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Press Start 2P'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+    StyleElements = [seClient, seBorder]
+  end
+  object ThreeDeckInfo: TLabel
+    Left = 484
+    Top = 391
+    Width = 42
+    Height = 30
+    Alignment = taCenter
+    AutoSize = False
+    Caption = '2'
+    Color = clBtnFace
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Press Start 2P'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+    StyleElements = [seClient, seBorder]
+  end
+  object FourDeckInfo: TLabel
+    Left = 484
+    Top = 475
+    Width = 42
+    Height = 30
+    Alignment = taCenter
+    AutoSize = False
+    Caption = '1'
+    Color = clBtnFace
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Press Start 2P'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+    StyleElements = [seClient, seBorder]
+  end
+  object Label1: TLabel
+    Left = 0
+    Top = 136
+    Width = 545
+    Height = 27
+    Alignment = taCenter
+    AutoSize = False
+    Caption = #1056#1072#1089#1089#1090#1072#1074#1100#1090#1077' '#1089#1074#1086#1080' '#1082#1086#1088#1072#1073#1083#1080':'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -18
+    Font.Name = 'Press Start 2P'
+    Font.Style = []
+    ParentFont = False
+    StyleElements = [seClient, seBorder]
+  end
+  object Label2: TLabel
+    Left = 0
+    Top = 32
+    Width = 545
+    Height = 27
+    Alignment = taCenter
+    AutoSize = False
+    Caption = #1042#1074#1077#1076#1080#1090#1077' '#1089#1074#1086#1105' '#1080#1084#1103':'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -18
+    Font.Name = 'Press Start 2P'
+    Font.Style = []
+    ParentFont = False
+    StyleElements = [seClient, seBorder]
+  end
+  object btnRandom: TPanel
+    Left = 46
+    Top = 540
+    Width = 200
+    Height = 64
+    BevelOuter = bvNone
+    TabOrder = 5
+    object imgRandom: TImage
+      Left = 0
+      Top = 0
+      Width = 200
+      Height = 64
+      OnClick = btnRandomClick
+    end
+  end
+  object btnSetFour: TPanel
+    Left = 414
+    Top = 457
+    Width = 64
+    Height = 64
+    BevelOuter = bvNone
+    TabOrder = 0
+  end
+  object btnSetThree: TPanel
+    Left = 414
+    Top = 369
+    Width = 64
+    Height = 64
+    BevelOuter = bvNone
+    TabOrder = 1
+  end
+  object btnSetTwo: TPanel
+    Left = 414
+    Top = 281
+    Width = 64
+    Height = 64
+    BevelOuter = bvNone
+    TabOrder = 2
+  end
+  object btnSetOne: TPanel
+    Left = 414
+    Top = 193
+    Width = 64
+    Height = 64
+    BevelOuter = bvNone
+    TabOrder = 3
+  end
+  object btnClearMap: TPanel
+    Left = 294
+    Top = 540
+    Width = 200
+    Height = 64
+    BevelOuter = bvNone
+    TabOrder = 6
+    object imgClearMap: TImage
+      Left = 0
+      Top = 0
+      Width = 200
+      Height = 64
+      OnClick = btnClearMapClick
+    end
+  end
+  object Username: TEdit
+    Left = 94
+    Top = 72
+    Width = 352
+    Height = 40
+    Alignment = taCenter
+    AutoSize = False
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Press Start 2P'
+    Font.Style = []
+    MaxLength = 20
+    ParentFont = False
+    TabOrder = 7
+  end
+  object btnReadyGame: TPanel
+    Left = 164
+    Top = 626
+    Width = 200
+    Height = 64
+    BevelOuter = bvNone
+    Enabled = False
+    TabOrder = 4
+    Visible = False
+    object imgReadyGame: TImage
+      Left = 0
+      Top = 0
+      Width = 200
+      Height = 64
+      Align = alClient
+      Visible = False
+      OnClick = btnReadyGameClick
+      OnMouseEnter = imgReadyGameMouseEnter
+      OnMouseLeave = imgReadyGameMouseLeave
+      ExplicitLeft = -8
+    end
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 50
+    OnTimer = Timer1Timer
+    Left = 432
+    Top = 609
+  end
+  object MainMenu1: TMainMenu
+    Left = 478
+    Top = 57
+    object N1: TMenuItem
+      Caption = #1055#1088#1072#1074#1080#1083#1072
+    end
+  end
+end

@@ -1,0 +1,102 @@
+unit TableOfBattles;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, ListUnit, Vcl.StdCtrls;
+
+type
+  TForm3 = class(TForm)
+    Memo1: TMemo;
+    StringGrid1: TStringGrid;
+    procedure FormShow(Sender: TObject);
+    procedure FormHide(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form3: TForm3;
+
+implementation
+
+{$R *.dfm}
+
+
+
+procedure TForm3.FormCreate(Sender: TObject);
+begin
+BorderIcons := BorderIcons - [BiMaximize] + [BiHelp];
+    BorderStyle := BsSingle;
+    Position := PoDesktopCenter;
+With StringGrid1 Do
+    Begin
+        Cells[0, 0] := '№ ';
+        Cells[1, 0] := 'Игрок 1';
+        Cells[2, 0] := 'Игрок 2';
+        Cells[3, 0] := 'Время игры';
+        Cells[4, 0] := 'Флот игрока 1';
+        Cells[5, 0] := 'Флот игрока 2';
+    End;
+end;
+
+procedure TForm3.FormHide(Sender: TObject);
+begin
+Memo1.Text:='';
+end;
+Function CalcTotalTime(Time:Cardinal):String;
+var
+    Sec,Min:String;
+begin
+    Min:=IntToStr((Time) Div 1000 Div 60) + ' мин. ';
+    Sec:=  IntToStr((Time) Div 1000 Mod 60) + ' сек.';
+    CalcTotalTime:=Min+Sec;
+end;
+
+procedure TForm3.FormShow(Sender: TObject);
+Var
+    TempNode: PLineAboutFight;
+    Path:String;
+    ListCount,I: Integer;
+    TempList: TFightsList;
+    TempRecord,TempLineAboutFight: TRecordLineAboutFight;
+Begin
+    StringGrid1.ColWidths[0] := 40;
+    StringGrid1.ColWidths[1] := 180;
+    StringGrid1.ColWidths[1] :=90;
+    StringGrid1.ColWidths[3] := 100;
+    Path := ExtractFileDir(Application.ExeName);
+    TempList:=TFightsList.Create;
+    TempList:=TFightsList.GetFightsListFromFile(Path+'\fights.tof');
+    TempNode:=TempList.Head;
+    ListCount:=TempList.Count;
+    StringGrid1.RowCount := ListCount + 1;
+    While TempNode <> NIL Do
+    Begin
+        TempLineAboutFight := TempNode^.LineAboutFight;
+        Memo1.Lines.Add(TempLineAboutFight.PlayerName1 + ' играл против '+TempLineAboutFight.PlayerName2 + ' Общее время партии: ' +IntToStr(TempLineAboutFight.Time)+ ' флот 1 игрока: '+TempLineAboutFight.Pl1FleetLosses+ ' флот 2 игрока: '+TempLineAboutFight.Pl2FleetLosses + #10#13  );
+        TempNode := TempNode^.Next;
+    End;
+
+    TempNode:=TempList.Head;
+    I:=1;
+    While TempNode <> NIL Do
+    Begin
+        TempLineAboutFight := TempNode^.LineAboutFight;
+        StringGrid1.Cells[0, I] := IntTOStr(I);
+        StringGrid1.Cells[1, I] := TempLineAboutFight.PlayerName1;
+        StringGrid1.Cells[2, I] := TempLineAboutFight.PlayerName2;
+        StringGrid1.Cells[3, I] := CalcTotalTime(TempLineAboutFight.Time);
+        StringGrid1.Cells[4, I] := TempLineAboutFight.Pl1FleetLosses+'%';
+        StringGrid1.Cells[5, I] := TempLineAboutFight.Pl2FleetLosses+'%';
+        Inc(I);
+        TempNode := TempNode^.Next;
+    End;
+
+End;
+end.

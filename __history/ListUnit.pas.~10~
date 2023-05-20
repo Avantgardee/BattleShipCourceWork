@@ -1,0 +1,139 @@
+Unit ListUnit;
+
+Interface
+
+Uses System.SysUtils, Vcl.Dialogs;
+
+Type
+    PLineAboutFight = ^TNode;
+
+    TRecordLineAboutFight = Record
+        PlayerName1, PlayerName2: String[20];
+        Pl1FleetLosses, Pl2FleetLosses: Integer;
+        Time: Cardinal;
+    End;
+
+    TNode = Record
+        LineAboutFight: TRecordLineAboutFight;
+        Next: PLineAboutFight;
+    End;
+
+    TFightsList = Class
+        Head: PLineAboutFight;
+        Tail: PLineAboutFight;
+
+    Public
+        Constructor Create();
+        Procedure AddNewLineAboutFight(LineAboutFight: TRecordLineAboutFight);
+        Procedure SaveFightsList(FilePath: String);
+        Class Function GetFightsListFromFile(FilePath: String): TFightsList;
+    End;
+
+Implementation
+
+Constructor TFightsList.Create;
+Begin
+    Self.Head := NIL;
+    Self.Tail := NIL;
+End;
+
+Procedure TFightsList.AddNewLineAboutFight(LineAboutFight
+  : TRecordLineAboutFight);
+Var
+    NewLineAboutFight: PLineAboutFight;
+Begin
+
+    New(NewLineAboutFight);
+    NewLineAboutFight^.LineAboutFight := LineAboutFight;
+    NewLineAboutFight^.Next := NIL;
+
+    If Head = NIL Then
+    Begin
+        Head := NewLineAboutFight;
+        Tail := NewLineAboutFight;
+    End
+    Else
+    Begin
+        Tail^.Next := NewLineAboutFight;
+        Tail := NewLineAboutFight;
+    End;
+
+End;
+
+Procedure TFightsList.SaveFightsList(FilePath: String);
+Var
+    FileFightsList: File Of TRecordLineAboutFight;
+    TempList: PLineAboutFight;
+    TempLineAboutFight: TRecordLineAboutFight;
+Begin
+    TempList := Self.Head;
+    AssignFile(FileFightsList, FilePath);
+    Rewrite(FileFightsList);
+    While TempList <> NIL Do
+    Begin
+        TempLineAboutFight := TempList^.LineAboutFight;
+        Write(FileFightsList, TempLineAboutFight);
+        TempList := TempList^.Next;
+    End;
+    CloseFile(FileFightsList);
+End;
+
+Class Function TFightsList.GetFightsListFromFile(FilePath: String): TFightsList;
+Var
+    F: File Of TRecordLineAboutFight;
+    TempRecord: TRecordLineAboutFight;
+    TempLineAboutFight: TRecordLineAboutFight;
+    List: TFightsList;
+Begin
+    List := TFightsList.Create; // create an instance of the class
+    AssignFile(F, FilePath);
+    Try
+        If (Not(FileExists(FilePath))) Then
+        Begin
+            Rewrite(F); // create a new file
+        End
+        Else
+        Begin
+            Reset(F); // open existed file
+        End;
+        If FileSize(F) <> 0 Then
+        Begin
+            While (Not Eof(F)) Do
+            Begin
+                Try
+                    Read(F, TempRecord);
+                    List.AddNewLineAboutFight(TempRecord);
+                Except
+                    MessageDlg('Confirmation', MtError, MbOKCancel, 0);
+
+                End;
+            End;
+        End;
+
+    Finally
+        CloseFile(F);
+        Result := List;
+    End;
+
+    { Try
+      Try
+      AssignFile(FileOutput, ChangeFileExt(Path, '.dat'));
+      Rewrite(FileOutput);
+      Temp.Player1.AllShips := PlayersShips;
+      Temp.Player1.OwnMap := PlayerMap;
+      Temp.Player1.Name := Name1;
+      Temp.Player2.AllShips := OpponentShips;
+      Temp.Player2.OwnMap := OpponentMap;
+      Temp.Player2.Name := Name2;
+      Write(FileOutput, Temp);
+      Except
+      MessageBox(BattleForm.Handle, 'Выбранный файл некорректный, попробуйте другой файл', 'Предупреждение!', MB_OK + MB_ICONWARNING);
+      End;
+      Finally
+      CloseFile(FileOutput);
+      End;
+    }
+
+End;
+
+End.
